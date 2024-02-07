@@ -1,0 +1,85 @@
+import os
+import json
+
+def load_tasks():
+    if os.path.exists("tasks.json"):
+        with open("tasks.json", "r") as file:
+            return json.load(file)
+    else:
+        return []
+
+def save_tasks(tasks):
+    with open("tasks.json", "w") as file:
+        json.dump(tasks, file)
+
+def show_tasks(tasks):
+    if not tasks:
+        print("No tasks found.")
+    else:
+        print("Tasks:")
+        for i, task in enumerate(tasks, 1):
+            status = "Done" if task['done'] else "Undone"
+            print(f"{i}. {task['description']} - {status}")
+
+def add_task(tasks, description):
+    tasks.append({'description': description, 'done': False})
+    print("Task added successfully.")
+
+def mark_task_done(tasks, index):
+    if 1 <= index <= len(tasks):
+        tasks[index - 1]['done'] = True
+        print("Task marked as done.")
+    else:
+        print("Error: Invalid task index.")
+
+def mark_task_undone(tasks, index):
+    if 1 <= index <= len(tasks):
+        tasks[index - 1]['done'] = False
+        print("Task marked as undone.")
+    else:
+        print("Error: Invalid task index.")
+
+def remove_task(tasks, index):
+    if 1 <= index <= len(tasks):
+        removed_task = tasks.pop(index - 1)
+        print(f"Task '{removed_task['description']}' removed.")
+    else:
+        print("Error: Invalid task index.")
+
+def todo_list():
+    tasks = load_tasks()
+
+    while True:
+        print("\n--- To-Do List ---")
+        print("1. Show tasks")
+        print("2. Add task")
+        print("3. Mark task as done")
+        print("4. Mark task as undone")
+        print("5. Remove task")
+        print("6. Exit")
+
+        choice = input("Enter your choice (1-6): ")
+
+        if choice == '1':
+            show_tasks(tasks)
+        elif choice == '2':
+            description = input("Enter task description: ")
+            add_task(tasks, description)
+        elif choice == '3':
+            index = int(input("Enter the index of the task to mark as done: "))
+            mark_task_done(tasks, index)
+        elif choice == '4':
+            index = int(input("Enter the index of the task to mark as undone: "))
+            mark_task_undone(tasks, index)
+        elif choice == '5':
+            index = int(input("Enter the index of the task to remove: "))
+            remove_task(tasks, index)
+        elif choice == '6':
+            save_tasks(tasks)
+            print("To-Do List saved. see you !")
+            break
+        else:
+            print("Error: Invalid choice. Please enter a number between 1 and 6.")
+
+# Run the to-do list application
+todo_list()
