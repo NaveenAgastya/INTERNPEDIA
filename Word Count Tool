@@ -1,0 +1,51 @@
+import string
+
+def word_count(text):
+    words = text.split()
+    cleaned_words = [word.strip(string.punctuation).lower() for word in words]
+
+    # Remove empty strings after stripping punctuation
+
+    cleaned_words = [word for word in cleaned_words if word]  
+    unique_words = set(cleaned_words)
+    return len(unique_words)
+
+def word_count_tool():
+    print("Welcome to the Word Count Tool!")
+
+    while True:
+        try:
+            source = input("Enter 'text'  or 'file' to input : ").lower()
+
+            if source == 'text':
+                user_text = input("Enter the text: ")
+                count = word_count(user_text)
+            elif source == 'file':
+                file_path = input("Enter the file path: ")
+                with open(file_path, 'r') as file:
+                    file_text = file.read()
+                    count = word_count(file_text)
+            else:
+                print("Error: Invalid input. Please enter 'text' or 'file'.")
+                continue
+
+            print(f"Word count: {count}")
+
+        except FileNotFoundError:
+            print("Error: File not found. Please provide a valid file path.")
+        except IOError:
+            print("Error: Unable to read the file.")
+        except Exception as e:
+            print(f"Error: {e}")
+
+        choice = input("Do you want to count words for another text or file? (Y/N): ")
+        if choice == 'Y':
+            continue
+        else:
+            break
+
+    print("Thank you for using the Word Count Tool")
+
+# Run the word count tool
+word_count_tool()
+
